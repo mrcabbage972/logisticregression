@@ -24,13 +24,11 @@ iris = datasets.load_iris()
 X = iris.data[:100, :3]  # we only take the first two features.
 y = np.transpose(iris.target[:100])
 
-reg_param = 0.5
+my_lr = LogisticRegression(reg_param=0.5)
+my_lr.fit(X, y)
 
 
-#b = gradient_descent_numeric(opt_func, b0)
-#print 'numeric b={}'.format(b)
-
-print 'analytic b={}'.format(b)
+print 'analytic b={}'.format(my_lr.coef)
 
 LR = sklearn.linear_model.LogisticRegression(C=1,  fit_intercept=False)
 LR.fit(X, y)
