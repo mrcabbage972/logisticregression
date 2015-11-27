@@ -1,6 +1,6 @@
 import numpy as np
 
-from optimization import gradient_descent_backtrack
+from optimization import GradientDescent
 
 
 def p(b, x):
@@ -31,7 +31,9 @@ class LogisticRegression:
         opt_loss_func = lambda b : lr_loss(X, y, b, self.reg_param)
         opt_grad_loss_func = lambda b : lr_loss_gradient(X, y, b, self.reg_param)
 
-        self.coef = gradient_descent_backtrack(opt_loss_func, opt_grad_loss_func, np.zeros((1, X.shape[1])))
+        gd = GradientDescent()
+
+        self.coef = gd.fit(opt_loss_func, opt_grad_loss_func, np.zeros((1, X.shape[1])))
 
     def predict(self, X):
         return p(self.coef, X)
