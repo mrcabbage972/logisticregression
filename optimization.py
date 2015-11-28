@@ -11,6 +11,10 @@ class GradientDescent:
         self.max_iter = max_iter
         self.is_verbose = is_verbose
 
+        self.min_grad_mag_for_backtracking = 1e-10
+        self.min_step_size = 1e-10
+        self.max_step_size = 100
+
     def fit(self, loss_func, loss_grad_func, initial_guess):
         params = initial_guess.copy()
         termination = False
@@ -36,7 +40,7 @@ class GradientDescent:
             prev_loss = cur_loss
             it += 1
 
-            if self.is_verbose and np.mod(it, 1) == 0:
+            if self.is_verbose and np.mod(it, 100) == 0:
                 print 'Iteration {}: loss={}. step_size={}.\n  b={}\n, update={}'.format(it, cur_loss, step_size, params,
                                                                                          update)
         return params
@@ -57,7 +61,8 @@ class GradientDescent:
             step_size *= self.beta
             lhs = loss_func(b - step_size * grad_func(b))
 
-            if grad_mag < 1e-10:
+            if grad_mag < self.min_grad_mag_for_backtracking or step_size < self.min_step_size or step_size > self.max_step_size:
+                step_size = np.maximum(self.min_step_size, np.minimum(self.max_step_size, step_size))
                 step_size_criteria = True
             else:
                 rhs = cur_loss - self.alpha * step_size * grad_mag
