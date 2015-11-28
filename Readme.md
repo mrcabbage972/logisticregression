@@ -1,1 +1,1 @@
-This is a solver for logistic regression with L2 regularization. It is implemented using gradient descent with step size selection done by backtracking line search.
+This is a solver for logistic regression with L2 regularization, written in Python. It is implemented using gradient descent with step size selection done by backtracking line search.
