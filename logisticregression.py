@@ -15,8 +15,6 @@ def lr_loss_gradient(x, y, b, reg_param=0.0):
 
 
 def lr_loss(X, y, b, reg_param=0.0):
-    np.seterr(all='raise')
-
     loss = -np.sum(np.multiply(np.log(sigmoid(b, np.transpose(X))), np.transpose(y))
                    + np.multiply(np.log(1.0 - sigmoid(b, np.transpose(X))), 1.0 - np.transpose(y)))
 
