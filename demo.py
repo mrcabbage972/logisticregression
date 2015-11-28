@@ -13,9 +13,6 @@ lr = LogisticRegression(reg_param=0.01)
 lr.fit(X, y)
 pred = lr.predict(X)
 
-mse = np.sum((pred - y)**2)
-
-print 'Mean squared error=%f' % mse
-
+print '%6s %6s' % ('true', 'predicted')
 for i in xrange(0, len(y)):
-    print '{}, {}'.format(y[i], pred[i])
+    print '%6d %6.4f' %(y[i], pred[i])

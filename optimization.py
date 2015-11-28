@@ -3,14 +3,17 @@ import numpy as np
 
 class GradientDescent:
     def __init__(self, tol=1e-10, abstol=1e-14, alpha=0.3, beta=0.5, initial_step_size=2.0, max_iter=10000, is_verbose=False):
-        self.reltol = tol
-        self.abstol = abstol
-        self.alpha = alpha
-        self.beta = beta
-        self.initial_step_size = initial_step_size
-        self.max_iter = max_iter
         self.is_verbose = is_verbose
 
+        # Termination criteria
+        self.reltol = tol
+        self.abstol = abstol
+        self.max_iter = max_iter
+
+        # Parameters of step size selection
+        self.initial_step_size = initial_step_size
+        self.alpha = alpha
+        self.beta = beta
         self.min_grad_mag_for_backtracking = 1e-10
         self.min_step_size = 1e-10
         self.max_step_size = 100
