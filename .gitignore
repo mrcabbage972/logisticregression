@@ -45,6 +45,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-logisticregression/.idea/.name
+logisticregression/.idea/*
 logisticregression/.idea/logisticregression.iml
 logisticregression/temp.py
