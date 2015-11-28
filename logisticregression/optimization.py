@@ -3,7 +3,7 @@ import numpy as np
 
 class GradientDescent:
     def __init__(self, tol=1e-10, abstol=1e-14, alpha=0.3, beta=0.5, initial_step_size=2.0, max_iter=10000):
-        self.tol = tol
+        self.reltol = tol
         self.abstol = abstol
         self.alpha = alpha
         self.beta = beta
@@ -24,7 +24,7 @@ class GradientDescent:
             cur_loss = loss_func(b)
             update = step_size * grad_func(b)
 
-            termination = self.termination_criteria(cur_loss, prev_loss, update, it, self.max_iter, self.tol,
+            termination = self.termination_criteria(cur_loss, prev_loss, update, it, self.max_iter, self.reltol,
                                                     self.abstol)
 
             b -= update
@@ -47,13 +47,10 @@ class GradientDescent:
         return termination
 
     def calc_step_size(self, loss_func, grad_func, b, step_size):
-        alpha = 0.3
-        beta = 0.5
-
         step_size_criteria = False
-        step_size /= beta ** 2
+        step_size /= self.beta ** 2
         while not step_size_criteria:
-            step_size *= beta
+            step_size *= self.beta
             cur_grad = grad_func(b)
             cur_loss = loss_func(b)
             lhs = loss_func(b - step_size * grad_func(b))
@@ -61,7 +58,7 @@ class GradientDescent:
             if grad_mag < 1e-10:
                 step_size_criteria = True
             else:
-                rhs = cur_loss - alpha * step_size * grad_mag
+                rhs = cur_loss - self.alpha * step_size * grad_mag
                 step_size_criteria = lhs <= rhs
 
         return step_size
