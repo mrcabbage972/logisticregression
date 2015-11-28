@@ -57,13 +57,13 @@ class GradientDescent:
             termination = True
         return termination
 
-    def calc_step_size(self, loss_func, grad_func, cur_loss, cur_grad, b, step_size):
+    def calc_step_size(self, loss_func, grad_func, cur_loss, cur_grad, params, step_size):
         step_size_criteria = False
         step_size /= self.beta ** 2
         grad_mag = np.sum(cur_grad * cur_grad)
         while not step_size_criteria:
             step_size *= self.beta
-            lhs = loss_func(b - step_size * grad_func(b))
+            lhs = loss_func(params - step_size * grad_func(params))
 
             if grad_mag < self.min_grad_mag_for_backtracking\
                     or step_size < self.min_step_size\
