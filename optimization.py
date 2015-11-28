@@ -2,7 +2,8 @@ import numpy as np
 
 
 class GradientDescent:
-    def __init__(self, tol=1e-10, abstol=1e-14, alpha=0.3, beta=0.5, initial_step_size=2.0, max_iter=10000, is_verbose=False):
+    def __init__(self, tol=1e-10, abstol=1e-14, alpha=0.3, beta=0.5,
+                 initial_step_size=2.0, max_iter=10000, is_verbose=False):
         self.is_verbose = is_verbose
 
         # Termination criteria
@@ -44,8 +45,8 @@ class GradientDescent:
             it += 1
 
             if self.is_verbose and np.mod(it, 100) == 0:
-                print 'Iteration {}: loss={}. step_size={}.\n  b={}\n, update={}'.format(it, cur_loss, step_size, params,
-                                                                                         update)
+                print 'Iteration {}: loss={}. step_size={}.\n  b={}\n, update={}'.format(
+                    it, cur_loss, step_size, params, update)
         return params
 
     def termination_criteria(self, cur_loss, prev_loss, update, it, max_iter, reltol, abstol):
@@ -64,7 +65,9 @@ class GradientDescent:
             step_size *= self.beta
             lhs = loss_func(b - step_size * grad_func(b))
 
-            if grad_mag < self.min_grad_mag_for_backtracking or step_size < self.min_step_size or step_size > self.max_step_size:
+            if grad_mag < self.min_grad_mag_for_backtracking\
+                    or step_size < self.min_step_size\
+                    or step_size > self.max_step_size:
                 step_size = np.maximum(self.min_step_size, np.minimum(self.max_step_size, step_size))
                 step_size_criteria = True
             else:
