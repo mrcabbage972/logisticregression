@@ -1,5 +1,5 @@
 import numpy as np
-from optimization import GradientDescent
+import optimization
 
 BOUND = 20.0
 
@@ -24,17 +24,29 @@ def lr_loss(X, y, b, reg_param=0.0):
 
 
 class LogisticRegression:
-    def __init__(self, reg_param=0.0, is_verbose=False):
+    def __init__(self, reg_param=0.0, is_verbose=False, store_iter_loss=False, step_size='auto'):
+        self.step_size = step_size
+        self.store_iter_loss = store_iter_loss
         self.reg_param = reg_param
         self.is_verbose = is_verbose
+        self.iter_loss = None
 
     def fit(self, X, y):
         opt_loss_func = lambda b: lr_loss(X, y, b, self.reg_param)
         opt_grad_loss_func = lambda b: lr_loss_gradient(X, y, b, self.reg_param)
 
-        gd = GradientDescent(is_verbose=self.is_verbose)
+        if self.step_size == 'auto':
+            step_size_selector = optimization.BacktrackingStepSizeSelector()
+        else:
+            step_size_selector = optimization.FixedStepSizeSelector(step_size=self.step_size)
+
+        gd = optimization.GradientDescent(is_verbose=self.is_verbose, store_iter_loss=self.store_iter_loss,
+                                          step_size_selector=step_size_selector)
 
         self.coef = gd.fit(opt_loss_func, opt_grad_loss_func, np.zeros((1, X.shape[1])))
+
+        if self.store_iter_loss:
+            self.iter_loss = gd.iter_loss
 
     def predict(self, X):
         return sigmoid(self.coef, np.transpose(X))[0]
