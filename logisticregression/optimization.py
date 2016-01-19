@@ -81,7 +81,7 @@ class GradientDescent:
             if self.store_iter_loss:
                 self.iter_loss.append(cur_loss)
 
-            if self.is_verbose and np.mod(it, 100) == 0:
+            if self.is_verbose and np.mod(it, 1) == 0:
                 print 'Iteration {}: loss={}. step_size={}.\n  b={}\n, update={}'.format(
                     it, cur_loss, step_size, params_to_solve, params_update)
         return params_to_solve

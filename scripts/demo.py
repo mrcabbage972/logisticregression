@@ -1,5 +1,5 @@
 import numpy as np
-from logisticregression import LogisticRegression
+from logisticregression.logisticregression import LogisticRegression
 import matplotlib.pylab as plt
 
 X = np.array([[ 4.6, 3.2, 1.4, 0.2],

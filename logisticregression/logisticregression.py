@@ -1,4 +1,5 @@
 import numpy as np
+
 import optimization
 
 BOUND = 20.0
