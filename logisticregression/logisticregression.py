@@ -25,7 +25,8 @@ def lr_loss(X, y, b, reg_param=0.0):
 
 
 class LogisticRegression:
-    def __init__(self, reg_param=0.0, is_verbose=False, store_iter_loss=False, step_size='auto'):
+    def __init__(self, reg_param=0.0, is_verbose=False, store_iter_loss=False, solver='gd', step_size='auto'):
+        self.solver = solver
         self.step_size = step_size
         self.store_iter_loss = store_iter_loss
         self.reg_param = reg_param
@@ -41,13 +42,21 @@ class LogisticRegression:
         else:
             step_size_selector = optimization.FixedStepSizeSelector(step_size=self.step_size)
 
-        gd = optimization.GradientDescent(is_verbose=self.is_verbose, store_iter_loss=self.store_iter_loss,
-                                          step_size_selector=step_size_selector)
+        if self.solver == 'gd':
+            gd = optimization.GradientDescent(is_verbose=self.is_verbose, store_iter_loss=self.store_iter_loss,
+                                              step_size_selector=step_size_selector)
+            if self.store_iter_loss:
+                self.iter_loss = gd.iter_loss
 
-        self.coef = gd.fit(opt_loss_func, opt_grad_loss_func, np.zeros((1, X.shape[1])))
+            self.coef = gd.fit(opt_loss_func, opt_grad_loss_func, np.zeros((1, X.shape[1])), num_samples=X.shape[0])
+        elif self.solver == 'sgd':
+            sgd = optimization.StochasticGradientDescent(is_verbose=self.is_verbose, store_iter_loss=self.store_iter_loss,
+                                              step_size_selector=step_size_selector)
+            # TODO: add iteration loss reporting.
+            self.coef = sgd.fit(lambda X, y, b: lr_loss(X, y, b, self.reg_param),
+                                lambda X, y, b: lr_loss_gradient(X, y, b, self.reg_param),
+                                np.zeros((1, X.shape[1])),X, y)
 
-        if self.store_iter_loss:
-            self.iter_loss = gd.iter_loss
 
     def predict(self, X):
         return sigmoid(self.coef, np.transpose(X))[0]
